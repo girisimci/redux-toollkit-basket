@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { ChevronDown, ChevronUp } from "../icons";
-import { removeItem } from "../features/cart/cartSlice";
+import { removeItem, increase, decrease } from "../features/cart/cartSlice";
 const CartItem = ({ id, img, title, price, amount }) => {
   const dispatch = useDispatch();
   return (
@@ -21,11 +21,28 @@ const CartItem = ({ id, img, title, price, amount }) => {
       </div>
       <div>
         <button className="amount-btn">
-          <ChevronUp />
+          <button
+            className="amount-btn"
+            onClick={() => dispatch(increase({ id }))}
+          >
+            <ChevronUp />
+          </button>
         </button>
         <p className="amount">{amount}</p>
         <button className="amount-btn">
-          <ChevronDown />
+          <button
+            className="amount-btn"
+            onClick={() => {
+              // TODO - if işlemi amount 1 den aşşağı inerse item tamamen kalksın diye kullanılldı. aksi halde item -1 -2..vb şeklinde geri gider.
+              if (amount === 1) {
+                dispatch(removeItem(id));
+                return;
+              }
+              dispatch(decrease({ id }));
+            }}
+          >
+            <ChevronDown />
+          </button>
         </button>
       </div>
     </article>
